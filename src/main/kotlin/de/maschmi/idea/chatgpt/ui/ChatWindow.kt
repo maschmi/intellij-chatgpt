@@ -3,10 +3,13 @@ package de.maschmi.idea.chatgpt.ui
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.util.ui.JBUI
 import de.maschmi.idea.chatgpt.service.ChatGptService
+import kotlinx.coroutines.*
+import kotlinx.coroutines.swing.Swing
 import java.awt.BorderLayout
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.swing.*
+
 
 class ChatWindow(val chatService: ChatGptService) {
 
@@ -36,22 +39,30 @@ class ChatWindow(val chatService: ChatGptService) {
 
 
                         labels.add(questionLabel)
-                        val answerLabel = addAnswer(chatService.ask(text))
-                        labels.add(answerLabel)
-                        labels.forEach {
-                            it.preferredSize = it.preferredSize
+
+                        GlobalScope.launch(Dispatchers.Swing) {
+                            val response = chatService.ask(text)
+                            val answerLabel = if (response.isFailure) {
+                                addAnswer("Error: " + response.exceptionOrNull()?.message)
+                            } else {
+                                addAnswer(response.getOrDefault(""))
+                            }
+                            labels.forEach {
+                                it.preferredSize = it.preferredSize
+                            }
+
+                            conversationArea.add(questionLabel)
+                            conversationArea.add(answerLabel)
+                            scrollPane.verticalScrollBar.value = scrollPane.verticalScrollBar.maximum
+                            inputField.text = ""
+                            inputField.caretPosition = 0
+                            // this is a dirty hack, as it resets the carret position correctly, while setting it 0
+                            // leaves it inside row 1
+
+                            panel.revalidate()
+                            panel.repaint()
                         }
 
-                        conversationArea.add(questionLabel)
-                        conversationArea.add(answerLabel)
-                        scrollPane.verticalScrollBar.value = scrollPane.verticalScrollBar.maximum
-                        inputField.text = ""
-                        inputField.caretPosition = 0
-                        // this is a dirty hack, as it resets the carret position correctly, while setting it 0
-                        // leaves it inside row 1
-
-                        panel.revalidate()
-                        panel.repaint()
                     }
                 }
             }

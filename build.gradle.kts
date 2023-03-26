@@ -1,6 +1,8 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
+
     id("org.jetbrains.intellij") version "1.12.0"
 }
 
@@ -21,7 +23,8 @@ intellij {
 }
 
 dependencies {
-    implementation("com.lilittlecat:chatgpt:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
 }
 
 tasks {
