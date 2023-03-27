@@ -1,4 +1,4 @@
-package de.maschmi.idea.chatgpt.service
+package de.maschmi.idea.chatgpt.chatgpt
 
 class GptClientException(message: String) : Throwable() {
 

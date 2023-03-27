@@ -1,4 +1,4 @@
-package de.maschmi.idea.chatgpt.service.gpt
+package de.maschmi.idea.chatgpt.chatgpt.gpt
 
 import kotlinx.serialization.Serializable
 

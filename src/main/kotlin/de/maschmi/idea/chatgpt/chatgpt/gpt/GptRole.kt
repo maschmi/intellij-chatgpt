@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package de.maschmi.idea.chatgpt.service.gpt
+package de.maschmi.idea.chatgpt.chatgpt.gpt
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer

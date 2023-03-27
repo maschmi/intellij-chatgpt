@@ -1,10 +1,7 @@
-package de.maschmi.idea.chatgpt.service
+package de.maschmi.idea.chatgpt.chatgpt
 
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
-import de.maschmi.idea.chatgpt.configuration.ChatGptPluginSettingsState
-import de.maschmi.idea.chatgpt.service.gpt.*
+import de.maschmi.idea.chatgpt.chatgpt.gpt.*
 import kotlinx.coroutines.future.await
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -14,16 +11,18 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-@Service
-class ChatGptClient {
+class ChatGptClient(apiKey: String, private val apiUrl: URI) {
 
-    private val apiBearer: String =  "Bearer " + service<ChatGptPluginSettingsState>().apiKey
+    private val apiBearer: String = "Bearer $apiKey"
 
     private val client: HttpClient = HttpClient.newHttpClient()
-    private val completionUrl = URI("https://api.openai.com/v1/chat/completions")
 
-    suspend fun ask(query: String): Result<String> {
-        var request = buildSingleRequest(listOf( GptMessage(GptRole.USER, query)))
+    suspend fun ask(query: String): Result<GptMessage> {
+        return ask(listOf(GptMessage(GptRole.USER, query)))
+    }
+
+    suspend fun ask(chat: List<GptMessage>): Result<GptMessage> {
+        val request = buildRequestRequest(chat)
         val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .await()
         return if (response.statusCode() >= 400) {
@@ -34,23 +33,21 @@ class ChatGptClient {
             val answer = content.choices.firstOrNull()?.message?.content ?: ""
 
             if (answer.isNotBlank()) {
-                Result.success(answer)
+                Result.success(GptMessage(GptRole.ASSISTANT, answer))
             } else {
                 Result.failure(GptClientException("No answer for you!"))
             }
         }
-
-
     }
 
-    private fun buildSingleRequest(conversation: List<GptMessage>, model: GptModel = GptModel.GTP_3_5_TURBO): HttpRequest {
+    private fun buildRequestRequest(conversation: List<GptMessage>, model: GptModel = GptModel.GTP_3_5_TURBO): HttpRequest {
         val requestBody = GptRequest(model, conversation)
         logger<ChatGptClient>().debug("Post body: $requestBody")
         return HttpRequest
             .newBuilder()
             .setHeader("Authorization", apiBearer)
             .setHeader("Content-Type", "application/json")
-            .uri(completionUrl)
+            .uri(apiUrl)
             .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(requestBody)))
             .build()
     }
