@@ -15,9 +15,8 @@ public class ActionPane {
     private JPanel actionPanel;
     private JButton sendBtn;
 
-    public ActionPane(BiConsumer<ActionEvent, ActionPane> sendCallback, BiConsumer<ActionEvent, ActionPane> resetCallback) {
+    public ActionPane(BiConsumer<ActionEvent, ActionPane> sendCallback) {
         sendBtn.addActionListener(e -> sendCallback.accept(e, this));
-        resetBtn.addActionListener(e -> resetCallback.accept(e, this));
     }
 
     public String getText() {

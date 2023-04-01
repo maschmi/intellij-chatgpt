@@ -36,8 +36,6 @@ class ChatGptPluginSettingsState : PersistentStateComponent<ChatGptPluginSetting
         }
     }
 
-    var saveApiKey: Boolean = false
-
     companion object {
         fun getInstance(): ChatGptPluginSettingsState = service()
     }

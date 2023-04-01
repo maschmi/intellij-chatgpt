@@ -13,10 +13,6 @@ import java.net.URI
     private val completionUrl = URI("https://api.openai.com/v1/chat/completions")
     private var client: ChatGptClient = ChatGptClient(service<ChatGptPluginSettingsState>().apiKey, completionUrl)
 
-    suspend fun ask(query: String): Result<GptMessage> {
-        return client.ask(query)
-    }
-
     suspend fun ask(chat: MutableList<GptMessage>): Result<GptMessage> {
         return client.ask(chat)
     }
