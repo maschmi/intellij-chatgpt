@@ -1,1 +1,1 @@
-rootProject.name = "chatgpt"
+rootProject.name = "ai-butler"
