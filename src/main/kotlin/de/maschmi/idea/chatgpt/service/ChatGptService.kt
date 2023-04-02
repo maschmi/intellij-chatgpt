@@ -9,7 +9,7 @@ import de.maschmi.idea.chatgpt.configuration.ChatGptPluginSettingsState
 import java.net.URI
 
 @Service
- class ChatGptService {
+class ChatGptService {
 
     private val completionUrl = URI("https://api.openai.com/v1/chat/completions")
     private var client: ChatGptClient = ChatGptClient(service<ChatGptPluginSettingsState>().apiKey, completionUrl)

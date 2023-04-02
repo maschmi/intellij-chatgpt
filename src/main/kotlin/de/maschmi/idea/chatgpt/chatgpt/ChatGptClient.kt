@@ -35,10 +35,10 @@ class ChatGptClient(apiKey: String, private val apiUrl: URI) {
     }
 
 
-
-
-
-    private fun buildRequestRequest(conversation: List<GptMessage>, model: GptModel = GptModel.GTP_3_5_TURBO): HttpRequest {
+    private fun buildRequestRequest(
+        conversation: List<GptMessage>,
+        model: GptModel = GptModel.GTP_3_5_TURBO
+    ): HttpRequest {
         val requestBody = GptRequest(model, conversation)
         logger<ChatGptClient>().debug("Post body: $requestBody")
         return HttpRequest
@@ -49,7 +49,6 @@ class ChatGptClient(apiKey: String, private val apiUrl: URI) {
             .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(requestBody)))
             .build()
     }
-
 
 
 }

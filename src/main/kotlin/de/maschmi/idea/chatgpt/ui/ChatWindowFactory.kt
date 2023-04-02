@@ -7,7 +7,6 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
 import de.maschmi.idea.chatgpt.service.ChatGptService
-import javax.swing.*
 
 class ChatWindowFactory : ToolWindowFactory {
 

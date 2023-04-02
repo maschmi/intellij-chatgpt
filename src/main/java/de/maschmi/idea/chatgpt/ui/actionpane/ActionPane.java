@@ -2,15 +2,11 @@ package de.maschmi.idea.chatgpt.ui.actionpane;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ActionPane {
 
-    private JButton resetBtn;
     private JTextArea inputArea;
     private JPanel actionPanel;
     private JButton sendBtn;

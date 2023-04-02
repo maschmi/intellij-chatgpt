@@ -55,8 +55,8 @@ public class ConversationPane {
     }
 
     public void addAnswer(String text) throws BadLocationException {
-         var doc = outputTextPane.getStyledDocument();
-         doc.insertString(doc.getLength(), text + "\n", answerStyle);
+        var doc = outputTextPane.getStyledDocument();
+        doc.insertString(doc.getLength(), text + "\n", answerStyle);
     }
 
     public void addError(String text) throws BadLocationException {

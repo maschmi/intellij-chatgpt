@@ -30,7 +30,7 @@
                     icon="AllIcons.Actions.QuickfixOffBulb"
                     anchor="right"/>
         <applicationConfigurable id="ChatGptPlugin.ApiKeyConfigurable"
-                                displayName="Chat GPT"
-                                instance="de.maschmi.idea.chatgpt.configuration.ChatGptPluginConfigurable"/>
+                                 displayName="Chat GPT"
+                                 instance="de.maschmi.idea.chatgpt.configuration.ChatGptPluginConfigurable"/>
     </extensions>
 </idea-plugin>

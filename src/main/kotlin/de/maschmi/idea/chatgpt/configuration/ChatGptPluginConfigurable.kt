@@ -2,7 +2,10 @@ package de.maschmi.idea.chatgpt.configuration
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
-import javax.swing.*
+import javax.swing.JComponent
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JTextField
 
 class ChatGptPluginConfigurable : Configurable {
     private lateinit var apiKeyField: JTextField
