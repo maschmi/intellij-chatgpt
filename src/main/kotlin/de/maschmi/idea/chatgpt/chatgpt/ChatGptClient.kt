@@ -17,11 +17,11 @@ class ChatGptClient(apiKey: String, private val apiUrl: URI) {
 
     private val client: HttpClient = HttpClient.newHttpClient()
 
-    suspend fun ask(query: String): Result<GptMessage> {
+    suspend fun ask(query: String): Result<GptResponse> {
         return ask(listOf(GptMessage(GptRole.USER, query)))
     }
 
-    suspend fun ask(chat: List<GptMessage>): Result<GptMessage> {
+    suspend fun ask(chat: List<GptMessage>): Result<GptResponse> {
         val request = buildRequestRequest(chat)
         val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .await()
@@ -30,15 +30,13 @@ class ChatGptClient(apiKey: String, private val apiUrl: URI) {
             Result.failure(GptClientException("Could not communicate:  " + response.statusCode()))
         } else {
             val content = Json.decodeFromString<GptResponse>(response.body().toString())
-            val answer = content.choices.firstOrNull()?.message?.content ?: ""
-
-            if (answer.isNotBlank()) {
-                Result.success(GptMessage(GptRole.ASSISTANT, answer))
-            } else {
-                Result.failure(GptClientException("No answer for you!"))
-            }
+            return Result.success(content)
         }
     }
+
+
+
+
 
     private fun buildRequestRequest(conversation: List<GptMessage>, model: GptModel = GptModel.GTP_3_5_TURBO): HttpRequest {
         val requestBody = GptRequest(model, conversation)
@@ -51,6 +49,7 @@ class ChatGptClient(apiKey: String, private val apiUrl: URI) {
             .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(requestBody)))
             .build()
     }
+
 
 
 }

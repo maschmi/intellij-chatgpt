@@ -1,12 +1,12 @@
 package de.maschmi.idea.chatgpt.ui.actionpane;
 
-import org.slf4j.LoggerFactory;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class ActionPane {
 
@@ -14,9 +14,15 @@ public class ActionPane {
     private JTextArea inputArea;
     private JPanel actionPanel;
     private JButton sendBtn;
+    private JTable queryDetailsTable;
 
     public ActionPane(BiConsumer<ActionEvent, ActionPane> sendCallback) {
         sendBtn.addActionListener(e -> sendCallback.accept(e, this));
+        var detailsModel = new DefaultTableModel();
+        detailsModel.addColumn("Key");
+        detailsModel.addColumn("Value");
+        queryDetailsTable.setModel(detailsModel);
+
     }
 
     public String getText() {
@@ -25,6 +31,19 @@ public class ActionPane {
 
     public JPanel getActionPanel() {
         return actionPanel;
+    }
+
+    public void updateQueryDetails(DetailsRow detailsRow) {
+        var model = (DefaultTableModel) queryDetailsTable.getModel();
+        var exitingRow = model.getDataVector()
+                .stream()
+                .filter(v -> v.elementAt(0).equals(detailsRow.getKey()))
+                .findFirst();
+        exitingRow.ifPresentOrElse(
+                row -> row.setElementAt(detailsRow.getValue(), 1),
+                () -> model.addRow(new Object[]{detailsRow.getKey(), detailsRow.getValue()})
+        );
+        queryDetailsTable.repaint();
     }
 
 

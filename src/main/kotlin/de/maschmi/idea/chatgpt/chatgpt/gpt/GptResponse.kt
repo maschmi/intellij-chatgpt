@@ -22,6 +22,10 @@ data class GptResponseChoice(
 ) {}
 
 @Serializable
-data class TokenUsage(val prompt_tokens: Int, val completion_tokens: Int, val total_tokens: Int) {
+data class TokenUsage(
+    @SerialName("prompt_tokens") val promptTokens: Int,
+    @SerialName("completion_tokens") val completionTokens: Int,
+    @SerialName("total_tokens") val totalTokens: Int
+) {
 
 }

@@ -1,4 +1,4 @@
-package de.maschmi.idea.chatgpt.ui.actionpane;
+package de.maschmi.idea.chatgpt.ui.conversationpane;
 
 import com.intellij.ui.JBColor;
 

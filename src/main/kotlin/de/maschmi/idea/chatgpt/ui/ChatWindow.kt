@@ -1,10 +1,12 @@
 package de.maschmi.idea.chatgpt.ui
 
+import de.maschmi.idea.chatgpt.chatgpt.getAnswer
 import de.maschmi.idea.chatgpt.chatgpt.gpt.GptMessage
 import de.maschmi.idea.chatgpt.chatgpt.gpt.GptRole
 import de.maschmi.idea.chatgpt.service.ChatGptService
 import de.maschmi.idea.chatgpt.ui.actionpane.ActionPane
-import de.maschmi.idea.chatgpt.ui.actionpane.ConversationPane
+import de.maschmi.idea.chatgpt.ui.actionpane.DetailsRow
+import de.maschmi.idea.chatgpt.ui.conversationpane.ConversationPane
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -68,8 +70,16 @@ class ChatWindow(private val chatService: ChatGptService) {
                     chat.remove(userMessage)
                     conversationPane.addError(response.exceptionOrNull()?.message)
                 } else {
-                    val message = response.getOrThrow()
-                    conversationPane.addAnswer(message.content)
+                    val res = response.getOrThrow()
+                    val tokenUsage = res.usage
+                    actionPane.updateQueryDetails(DetailsRow("Model", res.model))
+                    actionPane.updateQueryDetails(DetailsRow("Tokens used", tokenUsage.totalTokens.toString()))
+
+                    if (res.getAnswer().isFailure) {
+                        conversationPane.addError("Answer was empty!")
+                    } else {
+                        conversationPane.addAnswer(res.getAnswer().getOrNull()?.content)
+                    }
                 }
             }
         }
