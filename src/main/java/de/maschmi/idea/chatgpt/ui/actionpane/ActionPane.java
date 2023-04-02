@@ -2,8 +2,10 @@ package de.maschmi.idea.chatgpt.ui.actionpane;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ActionPane {
 
@@ -12,8 +14,10 @@ public class ActionPane {
     private JButton sendBtn;
     private JTable queryDetailsTable;
 
-    public ActionPane(BiConsumer<ActionEvent, ActionPane> sendCallback) {
+    public ActionPane(BiConsumer<ActionEvent, ActionPane> sendCallback,
+                      Consumer<ActionPane> onCtrlEnterCallback) {
         sendBtn.addActionListener(e -> sendCallback.accept(e, this));
+        inputArea.addKeyListener(new CtrlEnterKeyListener(() -> onCtrlEnterCallback.accept(this)));
         var detailsModel = new DefaultTableModel();
         detailsModel.addColumn("Key");
         detailsModel.addColumn("Value");
@@ -23,6 +27,19 @@ public class ActionPane {
 
     public String getText() {
         return inputArea.getText();
+    }
+
+    public void clearInput() throws BadLocationException {
+        var doc = inputArea.getDocument();
+        doc.remove(0, doc.getLength());
+    }
+
+    public void disableInput() {
+        inputArea.setEditable(false);
+    }
+
+    public void enableInput() {
+        inputArea.setEditable(true);
     }
 
     public JPanel getActionPanel() {

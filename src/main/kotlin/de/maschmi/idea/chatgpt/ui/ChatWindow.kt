@@ -33,13 +33,9 @@ class ChatWindow(private val chatService: ChatGptService) {
         this.panel = JPanel(BorderLayout())
 
         val sendCallback: ActionPaneCallback = { _, ui ->
-            run {
-                val input = ui.text.trimEnd('\n')
-                if (input.isNotEmpty()) {
-                    runQuery(input)
-                }
-            }
+            sendCallbackImpl(ui)
         }
+        val sendByKeyPressed = { ui: ActionPane -> sendCallbackImpl(ui) }
         val clearContextCallback: OutputPaneCallback = { _, ui ->
             run {
                 println("Reset pressed")
@@ -50,9 +46,19 @@ class ChatWindow(private val chatService: ChatGptService) {
 
         this.conversationPane =
             ConversationPane(clearContextCallback)
-        this.actionPane = ActionPane(sendCallback)
+
+        this.actionPane = ActionPane(sendCallback, sendByKeyPressed)
         panel.add(conversationPane.outputPanel, BorderLayout.CENTER)
         panel.add(actionPane.actionPanel, BorderLayout.SOUTH)
+    }
+
+    private fun sendCallbackImpl(ui: ActionPane) {
+        run {
+            val input = ui.text.trimEnd('\n')
+            if (input.isNotEmpty()) {
+                runQuery(input)
+            }
+        }
     }
 
     private fun runQuery(input: String) {
@@ -63,6 +69,7 @@ class ChatWindow(private val chatService: ChatGptService) {
                 conversationPane.displayLoadingIndicator()
                 val userMessage = GptMessage(GptRole.USER, input)
                 chat.add(userMessage)
+                actionPane.disableInput()
                 val response = chatService.ask(chat)
                 conversationPane.removeLoadingIndicator()
 
@@ -72,6 +79,7 @@ class ChatWindow(private val chatService: ChatGptService) {
                 } else {
                     val res = response.getOrThrow()
                     val tokenUsage = res.usage
+                    actionPane.clearInput();
                     actionPane.updateQueryDetails(DetailsRow("Model", res.model))
                     actionPane.updateQueryDetails(DetailsRow("Tokens used", tokenUsage.totalTokens.toString()))
 
@@ -81,6 +89,7 @@ class ChatWindow(private val chatService: ChatGptService) {
                         conversationPane.addAnswer(res.getAnswer().getOrNull()?.content)
                     }
                 }
+                actionPane.enableInput()
             }
         }
     }
