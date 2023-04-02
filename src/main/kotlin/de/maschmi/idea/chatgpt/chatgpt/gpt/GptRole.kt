@@ -19,7 +19,7 @@ enum class GptRole(val role: String) {
     ASSISTANT("assistant");
 
     companion object {
-        fun fromString(value: String) = GptRole.values().first { it.role == value}
+        fun fromString(value: String) = GptRole.values().first { it.role == value }
     }
 }
 
