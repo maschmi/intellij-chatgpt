@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.maschmi.idea"
-version = "0.1.0-SNAPSHOT"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
