@@ -1,17 +1,15 @@
 package de.maschmi.idea.chatgpt.ui.actionpane;
 
 import com.intellij.ui.JBColor;
-import com.intellij.util.io.WalEvent;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.function.BiConsumer;
 
-public class OutputPane {
+public class ConversationPane {
     private JButton clearContextBtn;
     private JTextPane outputTextPane;
     private JPanel outputPanel;
@@ -24,7 +22,7 @@ public class OutputPane {
 
     private static final String LOADING_PLACEHOLDER = "Loading...";
 
-    public OutputPane(BiConsumer<ActionEvent, OutputPane> clearCallback) {
+    public ConversationPane(BiConsumer<ActionEvent, ConversationPane> clearCallback) {
         clearContextBtn.addActionListener(e -> clearCallback.accept(e, this));
 
         StyleConstants.setBold(questionStyle, true);
