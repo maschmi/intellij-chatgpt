@@ -25,13 +25,14 @@ class ChatGptPluginSettingsState : PersistentStateComponent<ChatGptPluginSetting
 
     private fun loadApiKey(): String {
         return try {
-            service<PasswordSafe>().get(getCredentialsAttributes())?.password.toString()
+            PasswordSafe.instance.get(getCredentialsAttributes())?.password.toString()
         } catch (ex: Exception) {
             ""
         }
     }
 
     companion object {
+        @JvmStatic
         fun getInstance(): ChatGptPluginSettingsState = service()
     }
 
@@ -46,5 +47,4 @@ class ChatGptPluginSettingsState : PersistentStateComponent<ChatGptPluginSetting
     private fun getCredentialsAttributes(): CredentialAttributes {
         return CredentialAttributes("ChatGptPluginSettingsState")
     }
-
 }

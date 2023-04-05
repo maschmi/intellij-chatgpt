@@ -12,9 +12,15 @@ import java.net.URI
 class ChatGptService {
 
     private val completionUrl = URI("https://api.openai.com/v1/chat/completions")
-    private var client: ChatGptClient = ChatGptClient(service<ChatGptPluginSettingsState>().apiKey, completionUrl)
+    private var client: ChatGptClient = ChatGptClient(ChatGptPluginSettingsState.getInstance().apiKey, completionUrl)
 
     suspend fun ask(chat: MutableList<GptMessage>): Result<GptResponse> {
         return client.ask(chat)
     }
+
+    companion object {
+        @JvmStatic
+        fun getInstance(): ChatGptService = service()
+    }
+
 }
