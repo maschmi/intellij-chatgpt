@@ -1,6 +1,5 @@
 package de.maschmi.idea.chatgpt.ui
 
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -17,11 +16,11 @@ class ChatWindowFactory : ToolWindowFactory {
     }
 
     private fun createToolWindow(): Content {
-        val askService = service<ChatGptService>()
+        val askService = ChatGptService.getInstance()
 
         val window = ChatWindow(askService)
         // Add the panel to the tool window content
-        val contentFactory = ContentFactory.SERVICE.getInstance()
+        val contentFactory = ContentFactory.getInstance()
         return contentFactory.createContent(window.panel, "", false)
     }
 }

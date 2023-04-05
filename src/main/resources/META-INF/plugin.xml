@@ -14,28 +14,27 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    This plugin allows you to open a conversation with ChatGpt in a tool window. Currently the conversation is not
+    This plugin allows you to open a conversation with ChatGpt in a tool window. Currently, the conversation is not
     stored anywhere and will be lost once you close the IDE. You need a ChatGPT API key to use this plugin. Please
     configure it under settings.
-
-    Later plans for this plugin are:
-    - storing the conversation
-    - add a context menu action to ask about the selected code
-
-    Requirements:
-    - ChatGPT Api Key
-
-    Repository:
-    https://github.com/maschmi/intellij-chatgpt
-
-    Disclaimer:
+    \n\n
+    Later plans for this plugin are:\n
+    - storing the conversation\n
+    - add a context menu action to ask about the selected code\n
+    \n
+    Requirements:\n
+    - ChatGPT Api Key\n
+    \n
+    Repository:\n
+    https://github.com/maschmi/intellij-chatgpt\n
+    \n
+    Disclaimer:\n
     This plugin mainly serves me as a toy project to get familiar with IntelliJ plugins.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
