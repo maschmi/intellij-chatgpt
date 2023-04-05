@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+        width="43.315254mm"
+        height="43.814178mm"
+        viewBox="0 0 43.315254 43.814178"
+        version="1.1"
+        id="svg12"
+        xmlns="http://www.w3.org/2000/svg"
+>
+  <defs
+          id="defs9"/>
+  <g
+          id="layer1"
+          transform="translate(-15.939628,-76.312963)">
+    <g
+            id="g1486">
+      <rect
+              style="fill:#182e03;fill-opacity:0.804428;stroke:#000000;stroke-width:0.3"
+              id="rect178-0"
+              width="39.012711"
+              height="39.641949"
+              x="18.090904"
+              y="78.399078"
+              ry="5.5617247"/>
+      <rect
+              style="fill:none;fill-opacity:0.280227;stroke:none;stroke-width:0.33233"
+              id="rect178-3-9"
+              width="43.315254"
+              height="43.814171"
+              x="15.939629"
+              y="76.312965"/>
+      <text
+              xml:space="preserve"
+              style="font-size:14.1111px;line-height:1.25;font-family:sans-serif;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+              x="25.177727"
+              y="93.251312"
+              id="text342-6"><tspan
+           id="tspan340-3"
+           style="font-size:14.1111px;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+           x="25.177727"
+           y="93.251312">?</tspan></text>
+      <text
+              xml:space="preserve"
+              style="font-size:14.1111px;line-height:1.25;font-family:sans-serif;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+              x="34.169907"
+              y="103.60927"
+              id="text342-3-8"><tspan
+           id="tspan340-6-5"
+           style="font-size:14.1111px;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+           x="34.169907"
+           y="103.60927">?</tspan></text>
+      <text
+              xml:space="preserve"
+              style="font-size:14.1111px;line-height:1.25;font-family:sans-serif;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+              x="43.293846"
+              y="112.10397"
+              id="text342-7-6"><tspan
+           id="tspan340-5-1"
+           style="font-size:14.1111px;fill:#cbcbcb;fill-opacity:1;stroke-width:0.264583"
+           x="43.293846"
+           y="112.10397">?</tspan></text>
+      <text
+              xml:space="preserve"
+              style="font-size:3.94801px;line-height:1.25;font-family:sans-serif;fill:#cbcbcb;fill-opacity:1;stroke-width:0.370124"
+              x="74.936722"
+              y="56.227104"
+              id="text1381-1"
+              transform="matrix(0.71753565,0.66735944,-0.53363998,0.89733566,0,0)"><tspan
+           id="tspan1379-5"
+           style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Hack;-inkscape-font-specification:'Hack Bold Italic';fill:#cbcbcb;fill-opacity:1;stroke-width:0.370124"
+           x="74.936722"
+           y="56.227104">AI Butler</tspan></text>
+    </g>
+  </g>
+</svg>
