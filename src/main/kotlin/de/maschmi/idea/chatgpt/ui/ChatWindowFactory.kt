@@ -11,14 +11,14 @@ class ChatWindowFactory : ToolWindowFactory {
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         // Create a JPanel to hold our UI components
-        val content = createToolWindow()
+        val content = createToolWindow(toolWindow)
         toolWindow.contentManager.addContent(content)
     }
 
-    private fun createToolWindow(): Content {
+    private fun createToolWindow(toolWindow: ToolWindow): Content {
         val askService = ChatGptService.getInstance()
 
-        val window = ChatWindow(askService)
+        val window = ChatWindow(askService, toolWindow)
         // Add the panel to the tool window content
         val contentFactory = ContentFactory.getInstance()
         return contentFactory.createContent(window.panel, "", false)
