@@ -14,7 +14,7 @@ class ChatGptService {
     private val completionUrl = URI("https://api.openai.com/v1/chat/completions")
     private var client: ChatGptClient = ChatGptClient(ChatGptPluginSettingsState.getInstance().apiKey, completionUrl)
 
-    suspend fun ask(chat: MutableList<GptMessage>): Result<GptResponse> {
+    suspend fun ask(chat: List<GptMessage>): Result<GptResponse> {
         return client.ask(chat)
     }
 
