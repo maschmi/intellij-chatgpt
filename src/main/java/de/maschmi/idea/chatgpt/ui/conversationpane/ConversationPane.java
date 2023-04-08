@@ -28,11 +28,8 @@ public class ConversationPane {
         StyleConstants.setBold(questionStyle, true);
         StyleConstants.setItalic(loadingStyle, true);
 
-        StyleConstants.setSpaceBelow(answerStyle, StyleConstants.getFontSize(questionStyle) * 1.5f);
-
         StyleConstants.setBackground(errorStyle, JBColor.RED);
         StyleConstants.setForeground(errorStyle, JBColor.WHITE);
-        StyleConstants.setSpaceBelow(errorStyle, StyleConstants.getFontSize(errorStyle) * 1.5f);
     }
 
     public JPanel getOutputPanel() {
@@ -56,7 +53,7 @@ public class ConversationPane {
 
     public void addAnswer(String text) throws BadLocationException {
         var doc = outputTextPane.getStyledDocument();
-        doc.insertString(doc.getLength(), text + "\n", answerStyle);
+        doc.insertString(doc.getLength(), text + "\n\n", answerStyle);
     }
 
     public void addError(String text) throws BadLocationException {
