@@ -1,5 +1,6 @@
 package de.maschmi.idea.chatgpt.ui
 
+import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.wm.ToolWindow
 import de.maschmi.idea.chatgpt.chatgpt.getAnswer
@@ -10,9 +11,7 @@ import de.maschmi.idea.chatgpt.service.storage.ConversationStorageService
 import de.maschmi.idea.chatgpt.ui.actionpane.ActionPane
 import de.maschmi.idea.chatgpt.ui.actionpane.DetailsRow
 import de.maschmi.idea.chatgpt.ui.conversationpane.ConversationPane
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.swing.Swing
 import kotlinx.datetime.Instant
 import java.awt.BorderLayout
@@ -26,10 +25,12 @@ typealias OutputPaneCallback = (ActionEvent, ConversationPane) -> Unit
 class ChatWindow(
     private val chatService: ChatGptService,
     private val toolWindow: ToolWindow,
-    private val ioDispatcher: CoroutineContext = Dispatchers.IO
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
+    private val swingDispatcher: CoroutineContext = Dispatchers.Swing
 ) {
 
 
+    private val swingCoroutineScope = CoroutineScope(swingDispatcher)
     private val actionPane: ActionPane
     private val conversationPane: ConversationPane
     private val chat: MutableList<ChatMessage>
@@ -59,8 +60,8 @@ class ChatWindow(
         panel.add(conversationPane.outputPanel, BorderLayout.CENTER)
         panel.add(actionPane.actionPanel, BorderLayout.SOUTH)
 
-
         val conversation = storageService().loadConversation()
+
         this.chat = conversation.toMutableList()
         this.chat.forEach {
             when (it.role) {
@@ -86,41 +87,43 @@ class ChatWindow(
         if (input.isNotEmpty()) {
             conversationPane.addQuestion(input)
 
-
-            GlobalScope.launch(Dispatchers.Swing) {
+            swingCoroutineScope.launch(swingDispatcher) {
                 conversationPane.displayLoadingIndicator()
                 val userMessage = ChatMessage(GptRole.USER, input)
                 chat.add(userMessage)
                 actionPane.disableInput()
-                val response = chatService.ask(chat.map { it.asGptMessage() }.toList())
+
+                val response = withContext(ioDispatcher) {
+                    chatService.ask(chat.map { it.asGptMessage() }.toList())
+                }
+
                 conversationPane.removeLoadingIndicator()
 
-                if (response.isFailure) {
-                    chat.remove(userMessage)
-                    conversationPane.addError(response.exceptionOrNull()?.message)
-                } else {
-                    val res = response.getOrThrow()
-                    val tokenUsage = res.usage
-                    actionPane.clearInput()
-                    actionPane.updateQueryDetails(DetailsRow("Model", res.model))
-                    actionPane.updateQueryDetails(DetailsRow("Tokens used", tokenUsage.totalTokens.toString()))
-
-                    if (res.getAnswer().isFailure) {
-                        conversationPane.addError("Answer was empty!")
+                    if (response.isFailure) {
+                        chat.remove(userMessage)
+                        conversationPane.addError(response.exceptionOrNull()?.message)
                     } else {
-                        val answerMessage = ChatMessage(
-                            Instant.fromEpochMilliseconds(res.created),
-                            res.getAnswer().getOrThrow().role,
-                            res.getAnswer().getOrThrow().content
-                        )
-                        chat.add(answerMessage)
-                        conversationPane.addAnswer(answerMessage.content)
+                        val res = response.getOrThrow()
+                        val tokenUsage = res.usage
+                        actionPane.clearInput()
+                        actionPane.updateQueryDetails(DetailsRow("Model", res.model))
+                        actionPane.updateQueryDetails(DetailsRow("Tokens used", tokenUsage.totalTokens.toString()))
+
+                        if (res.getAnswer().isFailure) {
+                            conversationPane.addError("Answer was empty!")
+                        } else {
+                            val answerMessage = ChatMessage(
+                                Instant.fromEpochMilliseconds(res.created),
+                                res.getAnswer().getOrThrow().role,
+                                res.getAnswer().getOrThrow().content
+                            )
+                            chat.add(answerMessage)
+                            conversationPane.addAnswer(answerMessage.content)
+                        }
                     }
-                }
-                actionPane.enableInput()
-                launch(ioDispatcher) {
+                    actionPane.enableInput()
+
                     storageService().storeConversation(chat)
-                }
             }
         }
     }
